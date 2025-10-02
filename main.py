@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from tkinter import ttk
+from transformers import pipeline
+from diffusers import StableDiffusionPipeline
+import torch
 import os
 
 
@@ -63,3 +67,14 @@ class TextToImage(AIModel):
         out_path = "assets/generated.png"
         image.save(out_path)
         return f"Image saved at {out_path} (running on {self.device})"
+    
+class Logger:
+    # Defining a decorators called staticmethod
+    @staticmethod
+    # Creating a log function for logging every steps taking place in the process
+    def log_action(func):
+        def wrapper(*args, **kwargs):
+            # Prints the function name that is being called
+            print(f"Running: {func.__name__}")
+            return func(*args, **kwargs)
+        return wrapper
