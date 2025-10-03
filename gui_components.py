@@ -48,3 +48,26 @@ class AIApp(tk.Tk):
         file_path = filedialog.askopenfilename()
         self.input_text.delete(0, tk.END)
         self.input_text.insert(0, file_path)
+
+    def run_task(self):
+        task = self.task_var.get()
+
+        if task == "Image→Text":
+            image_path = self.input_text.get()
+            if not image_path:
+                messagebox.showerror("Error", "Please select an image file")
+                return
+            caption = self.image_to_text.generate_caption(image_path)
+            self.output_label.config(text=f"Caption: {caption}")
+
+        elif task == "Text→Image":
+            prompt = self.input_text.get()
+            if not prompt:
+                messagebox.showerror("Error", "Please enter a text prompt")
+                return
+            output_path = self.text_to_image.generate_image(prompt)
+            img = Image.open(output_path).resize((400, 400))
+            tk_img = ImageTk.PhotoImage(img)
+            self.image_label.config(image=tk_img)
+            self.image_label.image = tk_img
+            self.output_label.config(text="Generated Image Below")
